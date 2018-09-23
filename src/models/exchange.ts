@@ -2,7 +2,6 @@ import { Schema, model } from 'mongoose';
 import { Decimal128 } from 'bson';
 
 export const ExchangeSchema = new Schema({
-  createdAt: { type: Date, required: true },
   banks: [
     {
       name: String,
@@ -10,7 +9,7 @@ export const ExchangeSchema = new Schema({
       sell: { type: Decimal128, default: 0 }
     }
   ]
-});
+}, { timestamps: true });
 
 const Exchange = model("Exchange", ExchangeSchema);
 export default Exchange;

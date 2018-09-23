@@ -11,7 +11,7 @@ function allExchanges(req: Request, res: Response) : void {
     })
     .catch(err => {
       res.send(err)
-    }) 
+    })
 }
 
 // - POST /exchanges # insert new one
