@@ -1,5 +1,16 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Model, Document } from 'mongoose';
 import { Decimal128 } from 'bson';
+
+export interface IExchange extends Document {
+  banks: [
+    {
+      name: string,
+      buy?: number,
+      sell?: number
+    }
+  ],
+  createdAt: Date
+};
 
 export const ExchangeSchema = new Schema({
   banks: [
@@ -11,5 +22,5 @@ export const ExchangeSchema = new Schema({
   ]
 }, { timestamps: true });
 
-const Exchange = model("Exchange", ExchangeSchema);
+const Exchange : Model<IExchange> = model<IExchange>("Exchange", ExchangeSchema);
 export default Exchange;
