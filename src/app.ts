@@ -17,7 +17,7 @@ const URI: string = "mongodb://127.0.0.1:27017/eldolar";
 
  // config
 app.use(bodyParse.json());
-app.set("port", 3000);
+app.set("port", process.env.PORT || 3000);
 
 // routers
 app.use('/api/v1/exchanges', ExchangeRouter)
