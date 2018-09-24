@@ -12,5 +12,5 @@ Run server
 * ```$ yarn watch```
 
 
-[**Aditional docs**](/wiki)
+[**Aditional docs**](https://gitlab.com/edudepetris/eldolar/wikis/Tutorials-&-Sources)
  
