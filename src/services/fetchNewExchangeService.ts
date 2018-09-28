@@ -4,13 +4,15 @@ import BankOptions from './bankInterfaces';
 
 import * as cheerio from 'cheerio';
 
+import Nacion from './fetchers/nacion'
+
 class FetchNewExchangeService {
 
   constructor() {}
 
   run() : Promise<IExchange> {
     let promises : Promise<BankOptions>[] = [
-      this.fetchNacionExchange(),
+      (new Nacion).run(),
       this.fetchSantanderExchange(),
       this.fetchBBVAExchange(),
       this.fetchGaliciaExchange(),
@@ -26,31 +28,7 @@ class FetchNewExchangeService {
       return newExchange.save()
     })
   }
-
-  private fetchNacionExchange () : Promise<BankOptions> {
-    return axios.get("https://bit.ly/2NvKhcM")
-    .then(response => {
-      let html : string  = response.data
-      const $ = cheerio.load(html);
-      const tRow = $('#billetes > table > tbody > tr:nth-child(1)');
-      const buy : string = parseFloat(tRow.find('td:nth-child(2)').text().replace(',', '.')).toFixed(2);
-      const sell : string = parseFloat(tRow.find('td:nth-child(3)').text().replace(',', '.')).toFixed(2);
-
-      return {
-        name: 'Nación',
-        buy: parseFloat(buy),
-        sell: parseFloat(sell)
-      }
-    })
-    .catch(err => {
-      return {
-        name: 'Nación',
-        buy: 0,
-        sell: 0
-      }
-    })
-  }
-
+  
   private fetchSantanderExchange () : Promise<BankOptions> {
     return axios.get("https://bit.ly/2O9Mvvm")
     .then(response => {
