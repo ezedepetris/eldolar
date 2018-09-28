@@ -18,34 +18,28 @@ class FetchNewExchangeService {
     ];
 
     return Promise.all(promises)
-    .then(results => {
-      let banks : BankOptions[] = [];
-
-      results.forEach(result => {
-        banks.push(result);
-      });
-
+    .then( (banks : BankOptions[]) => {
       // save record into db
-      let exg = { banks: banks };
+      let exg = { banks };
       const newExchange : IExchange = new Exchange(exg);
 
       return newExchange.save()
     })
   }
 
-  fetchNacionExchange () : Promise<BankOptions> {
+  private fetchNacionExchange () : Promise<BankOptions> {
     return axios.get("https://bit.ly/2NvKhcM")
     .then(response => {
       let html : string  = response.data
       const $ = cheerio.load(html);
       const tRow = $('#billetes > table > tbody > tr:nth-child(1)');
-      const buy : number = parseFloat(tRow.find('td:nth-child(2)').text().replace(',', '.')).toFixed(2);
-      const sell : number = parseFloat(tRow.find('td:nth-child(3)').text().replace(',', '.')).toFixed(2);
+      const buy : string = parseFloat(tRow.find('td:nth-child(2)').text().replace(',', '.')).toFixed(2);
+      const sell : string = parseFloat(tRow.find('td:nth-child(3)').text().replace(',', '.')).toFixed(2);
 
       return {
         name: 'Nación',
-        buy: buy,
-        sell: sell
+        buy: parseFloat(buy),
+        sell: parseFloat(sell)
       }
     })
     .catch(err => {
@@ -57,7 +51,7 @@ class FetchNewExchangeService {
     })
   }
 
-  fetchSantanderExchange () : Promise<BankOptions> {
+  private fetchSantanderExchange () : Promise<BankOptions> {
     return axios.get("https://bit.ly/2O9Mvvm")
     .then(response => {
       let html : string  = response.data
@@ -66,13 +60,13 @@ class FetchNewExchangeService {
 
       const sanitizedBuy = tRow.find('td:nth-child(2)').text().replace('$', '').replace(',', '.');
       const sanitizedSell = tRow.find('td:nth-child(3)').text().replace('$', '').replace(',', '.');
-      const buy : number = parseFloat(sanitizedBuy).toFixed(2);
-      const sell : number = parseFloat(sanitizedSell).toFixed(2);
+      const buy : string = parseFloat(sanitizedBuy).toFixed(2);
+      const sell : string = parseFloat(sanitizedSell).toFixed(2);
 
       return {
         name: 'Santander',
-        buy: buy,
-        sell: sell
+        buy: parseFloat(buy),
+        sell: parseFloat(sell)
       }
     })
     .catch(err => {
@@ -84,7 +78,7 @@ class FetchNewExchangeService {
     })
   }
 
-  fetchBBVAExchange () : Promise<BankOptions> {
+  private fetchBBVAExchange () : Promise<BankOptions> {
     return axios.get("https://bit.ly/2O0wxUt")
     .then(response => {
       let html : string  = response.data
@@ -93,13 +87,13 @@ class FetchNewExchangeService {
 
       const sanitizedBuy = tRow.find('td:nth-child(2) span').text().replace(',', '.');
       const sanitizedSell = tRow.find('td:nth-child(3) span').text().replace(',', '.');
-      const buy : number = parseFloat(sanitizedBuy).toFixed(2);
-      const sell : number = parseFloat(sanitizedSell).toFixed(2);
+      const buy : string = parseFloat(sanitizedBuy).toFixed(2);
+      const sell : string = parseFloat(sanitizedSell).toFixed(2);
 
       return {
         name: 'BBVA-Francés',
-        buy: buy,
-        sell: sell
+        buy:parseFloat(buy),
+        sell: parseFloat(sell)
       }
     })
     .catch(err => {
@@ -111,12 +105,12 @@ class FetchNewExchangeService {
     })
   }
 
-  fetchGaliciaExchange () : Promise<BankOptions> {
+  private fetchGaliciaExchange () : Promise<BankOptions> {
     return axios.get("https://bit.ly/2wWvApx")
     .then(response => {
-      let result = JSON.parse(response.data);
-      let buy = 0;
-      let sell = 0;
+      const result = response.data
+      let buy = parseFloat(result.buy.replace(',', '.'));
+      let sell = parseFloat(result.sell.replace(',', '.'));
 
       return {
         name: 'Galicia',
@@ -133,7 +127,7 @@ class FetchNewExchangeService {
     })
   }
 
-  fetchSupervielleExchange () : Promise<BankOptions> {
+  private fetchSupervielleExchange () : Promise<BankOptions> {
     return axios.get("https://bit.ly/2N0GDZc")
     .then(response => {
       let html : string  = response.data
@@ -143,13 +137,13 @@ class FetchNewExchangeService {
 
       const sanitizedBuy = tRow.find('td:nth-child(2)').text().replace(',', '.');
       const sanitizedSell = tRow.find('td:nth-child(3)').text().replace(',', '.');
-      const buy : number = parseFloat(sanitizedBuy).toFixed(2);
-      const sell : number = parseFloat(sanitizedSell).toFixed(2);
+      const buy : string = parseFloat(sanitizedBuy).toFixed(2);
+      const sell : string = parseFloat(sanitizedSell).toFixed(2);
 
       return {
         name: 'Supervielle',
-        buy: buy,
-        sell: sell
+        buy: parseFloat(buy),
+        sell: parseFloat(sell)
       }
     })
     .catch(err => {
