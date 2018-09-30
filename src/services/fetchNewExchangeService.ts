@@ -12,7 +12,7 @@ class FetchNewExchangeService {
 
   run() : Promise<IExchange> {
     let promises : Promise<BankOptions>[] = [
-      (new Nacion).run(),
+      new Nacion().run(),
       this.fetchSantanderExchange(),
       this.fetchBBVAExchange(),
       this.fetchGaliciaExchange(),
