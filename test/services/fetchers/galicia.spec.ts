@@ -1,4 +1,4 @@
-import Galicia from '../../../src/services/fetchers/Galicia'
+import Galicia from '../../../src/services/fetchers/galicia'
 import BankOptions from '../../../src/services/bankInterfaces'
 import { expect } from 'chai'
 import * as nock from 'nock'
